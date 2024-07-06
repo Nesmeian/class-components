@@ -6,11 +6,12 @@ type Game = {
     released: string;
     background_image: string;
 };
-
+type Props = {
+    searchQuery: string;
+};
 type StateProps = {
     gameData: Game[];
 };
-interface Props {}
 export default class MainPageMain extends Component<Props, StateProps> {
     constructor(props: NonNullable<undefined>) {
         super(props);
@@ -18,15 +19,23 @@ export default class MainPageMain extends Component<Props, StateProps> {
             gameData: [],
         };
     }
-
     componentDidMount() {
+        // Вызываем loadGameData с начальным значением "Doom"
         this.loadGameData('Doom');
+    }
+    componentDidUpdate(prevProps: Props) {
+        // Проверяем, изменился ли пропс searchQuery
+        if (this.props.searchQuery !== prevProps.searchQuery) {
+            // Вызываем loadGameData с новым значением searchQuery
+            this.loadGameData(this.props.searchQuery);
+        }
     }
 
     loadGameData = async (searchQuery: string) => {
         try {
             const data = await getGameData(searchQuery);
             this.setState({ gameData: data.results });
+            console.log(data.results);
         } catch (error) {
             console.error(error);
         }

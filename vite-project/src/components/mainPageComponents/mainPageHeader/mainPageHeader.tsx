@@ -4,13 +4,17 @@ import logo from '..//..//../assets/image/react.svg';
 type StateProps = {
     searchInput: string;
 };
-interface Props {}
+interface Props {
+    onSearch: (searchValue: string) => void;
+}
 export default class MainPageHeader extends Component<Props, StateProps> {
     constructor(props: Props) {
         super(props);
         this.state = { searchInput: '' };
     }
-
+    handleSearchClick = () => {
+        this.props.onSearch(this.state.searchInput);
+    };
     changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             searchInput: e.target.value,
@@ -35,7 +39,10 @@ export default class MainPageHeader extends Component<Props, StateProps> {
                                 onChange={this.changeSearchValue}
                             />
                         </label>
-                        <button className="search-container__button btn">
+                        <button
+                            className="search-container__button btn"
+                            onClick={this.handleSearchClick}
+                        >
                             Click me
                         </button>
                     </div>

@@ -6,7 +6,8 @@ export default async function getGameData(searchGame: string) {
 
     try {
         const response = await fetch(url); // Отправляем запрос к API
-
+        const root = document.getElementById('root');
+        console.log(root);
         if (!response.ok) {
             throw new Error(`Request failed with status ${response.status}`); // Обработка ошибок запроса
         }
