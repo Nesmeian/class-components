@@ -1,0 +1,32 @@
+.main-page__main-header {
+    overflow: auto;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+        'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.header__search-container {
+    display: flex;
+    gap: 30px;
+}
+.main-page__main {
+    padding-top: 3%;
+    background-image: url('../assets/image/backgoundMainPage.jpg');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.search-container__lable {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+.search-container__button {
+    width: 100px;
+    height: 40px;
+    border-radius: 15px;
+}
