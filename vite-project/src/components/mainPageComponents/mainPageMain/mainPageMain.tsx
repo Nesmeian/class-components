@@ -1,29 +1,63 @@
 import { Component, ReactNode } from 'react';
-import work from '..//..//../assets/image/work.jpeg';
+import getGameData from '../../api/api';
+type Game = {
+    id: number;
+    name: string;
+    released: string;
+    background_image: string;
+};
+
 type StateProps = {
-    arr: number[];
+    gameData: Game[];
 };
 interface Props {}
 export default class MainPageMain extends Component<Props, StateProps> {
     constructor(props: NonNullable<undefined>) {
         super(props);
         this.state = {
-            arr: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            gameData: [],
         };
     }
-    renderItems = () => {
-        return this.state.arr.map((_, index) => (
-            // <div key={index} className="main-page__item">
-            //     {item}
-            // </div>
-            <img src={work} alt="image" key={index} width={300} height={300} />
-        ));
+
+    componentDidMount() {
+        this.loadGameData('Doom');
+    }
+
+    loadGameData = async (searchQuery: string) => {
+        try {
+            const data = await getGameData(searchQuery);
+            this.setState({ gameData: data.results });
+        } catch (error) {
+            console.error(error);
+        }
     };
+    onClick() {
+        console.log(1);
+    }
+    renderItems = () => {
+        return this.state.gameData.map((e) => {
+            const shortName =
+                e.name.length > 12 ? `${e.name.slice(0, 12)}...` : e.name;
+
+            return (
+                <div className="gallery__item" key={e.id}>
+                    <img
+                        className="gallery__item-img"
+                        src={e.background_image}
+                        alt={shortName}
+                        onClick={this.onClick}
+                    />
+                    <p className="gallery__item-name">{shortName}</p>
+                </div>
+            );
+        });
+    };
+
     render(): ReactNode {
         return (
             <>
                 <div className="main-page__main">
-                    <div className="main-page__container">
+                    <div className="main-page__gallery">
                         {this.renderItems()}
                     </div>
                 </div>

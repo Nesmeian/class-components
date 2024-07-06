@@ -3,9 +3,11 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
+    padding-top: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    z-index: 1;
+    background-color: black;
 }
 .header__search-container {
     display: flex;
@@ -14,7 +16,7 @@
 .main-page__main {
     overflow: auto;
     padding-top: 3%;
-    background-image: url('../assets/image/backgoundMainPage.jpg');
+    background-image: url('../assets/image/work.jpeg');
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -29,4 +31,33 @@
     width: 100px;
     height: 40px;
     border-radius: 15px;
+}
+.main-page__gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+.gallery__item {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    transition: all 0.5s ease;
+}
+.gallery__item-img {
+    border-radius: 25px;
+    width: 100%;
+    height: 100%;
+}
+.gallery__item:hover {
+    scale: 1.05;
+}
+.gallery__item-name {
+    position: absolute;
+    color: white;
+    bottom: 10%;
+    right: 10%;
+    font-size: 32px;
+    text-align: left;
 }
