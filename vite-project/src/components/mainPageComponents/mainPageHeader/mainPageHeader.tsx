@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import logo from '..//..//../assets/image/react.svg';
+import getGameData from '../../api/api';
 type StateProps = {
     searchInput: string;
 };
@@ -9,9 +10,9 @@ export default class MainPageHeader extends Component<Props, StateProps> {
         super(props);
         this.state = { searchInput: '' };
     }
-
-    click = () => {
+    click = async () => {
         console.log(this.state.searchInput);
+        console.log(await getGameData());
     };
 
     changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {

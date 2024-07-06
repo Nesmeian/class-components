@@ -1,6 +1,10 @@
 import { Component, ReactNode } from 'react';
 import work from '..//..//../assets/image/work.jpeg';
-export default class MainPageMain extends Component {
+type StateProps = {
+    arr: number[];
+};
+interface Props {}
+export default class MainPageMain extends Component<Props, StateProps> {
     constructor(props: NonNullable<undefined>) {
         super(props);
         this.state = {
