@@ -1,6 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { api_key, base_url } from '../../api/api';
-import Overlay from '../../thobber/thobber';
+import Overlay from '../../throbber/throbber';
 type Game = {
     id: number;
     name: string;
@@ -23,7 +23,8 @@ export default class MainPageMain extends Component<Props, StateProps> {
         };
     }
     componentDidMount() {
-        this.loadGameData('Doom');
+        const localSeach = localStorage.getItem('UserSearch') || 'Doom';
+        this.loadGameData(localSeach);
     }
     componentDidUpdate(prevProps: Props) {
         if (this.props.searchQuery !== prevProps.searchQuery) {

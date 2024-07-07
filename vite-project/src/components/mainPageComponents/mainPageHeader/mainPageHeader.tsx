@@ -10,11 +10,14 @@ interface Props {
 export default class MainPageHeader extends Component<Props, StateProps> {
     constructor(props: Props) {
         super(props);
-        this.state = { searchInput: '' };
+        const localSearch = localStorage.getItem('UserSearch') || '';
+        this.state = { searchInput: localSearch };
     }
     handleSearchClick = () => {
         this.props.onSearch(this.state.searchInput);
+        localStorage.setItem('UserSearch', this.state.searchInput);
     };
+
     changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             searchInput: e.target.value,
@@ -29,8 +32,8 @@ export default class MainPageHeader extends Component<Props, StateProps> {
                         <img src={logo} alt="logo" className="logo__img" />
                     </div>
                     <div className="header__search-container">
-                        <label className="search-container__lable">
-                            Seacrh Game
+                        <label className="search-container__label">
+                            Search Game
                             <input
                                 className="search-container__input"
                                 type="text"
