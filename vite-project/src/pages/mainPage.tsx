@@ -15,7 +15,6 @@ export default class MainPage extends Component<voidProps, State> {
     }
 
     handleSearch = (searchQuery: string) => {
-        // Обновляем состояние с новым запросом поиска
         this.setState({ searchQuery });
     };
 
@@ -23,9 +22,7 @@ export default class MainPage extends Component<voidProps, State> {
         const { searchQuery } = this.state;
         return (
             <>
-                {/* Передаем handleSearch как пропс в MainPageHeader */}
                 <MainPageHeader onSearch={this.handleSearch} />
-                {/* Передаем searchQuery как пропс в MainPageMain */}
                 <MainPageMain searchQuery={searchQuery} />
             </>
         );

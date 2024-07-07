@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
-import getGameData from '../../api/api';
+import { api_key, base_url } from '../../api/api';
+import Overlay from '../../thobber/thobber';
 type Game = {
     id: number;
     name: string;
@@ -10,39 +11,44 @@ type Props = {
     searchQuery: string;
 };
 type StateProps = {
+    isLoading: boolean;
     gameData: Game[];
 };
 export default class MainPageMain extends Component<Props, StateProps> {
-    constructor(props: NonNullable<undefined>) {
+    constructor(props: Props) {
         super(props);
         this.state = {
+            isLoading: false,
             gameData: [],
         };
     }
     componentDidMount() {
-        // Вызываем loadGameData с начальным значением "Doom"
         this.loadGameData('Doom');
     }
     componentDidUpdate(prevProps: Props) {
-        // Проверяем, изменился ли пропс searchQuery
         if (this.props.searchQuery !== prevProps.searchQuery) {
-            // Вызываем loadGameData с новым значением searchQuery
             this.loadGameData(this.props.searchQuery);
         }
     }
-
     loadGameData = async (searchQuery: string) => {
+        this.setState({ isLoading: true });
+        const pageSize = 20;
+        const url = `${base_url}?search=${searchQuery}&page_size=${pageSize}&key=${api_key}`;
         try {
-            const data = await getGameData(searchQuery);
-            this.setState({ gameData: data.results });
-            console.log(data.results);
+            const response = await fetch(url);
+            <Overlay></Overlay>;
+            if (!response.ok) {
+                throw new Error(
+                    `Request failed with status ${response.status}`,
+                );
+            }
+            const data = await response.json();
+            this.setState({ gameData: data.results, isLoading: false });
         } catch (error) {
             console.error(error);
+            this.setState({ isLoading: false });
         }
     };
-    onClick() {
-        console.log(1);
-    }
     renderItems = () => {
         return this.state.gameData.map((e) => {
             const shortName =
@@ -54,7 +60,6 @@ export default class MainPageMain extends Component<Props, StateProps> {
                         className="gallery__item-img"
                         src={e.background_image}
                         alt={shortName}
-                        onClick={this.onClick}
                     />
                     <p className="gallery__item-name">{shortName}</p>
                 </div>
@@ -63,9 +68,11 @@ export default class MainPageMain extends Component<Props, StateProps> {
     };
 
     render(): ReactNode {
+        const { isLoading } = this.state;
         return (
             <>
                 <div className="main-page__main">
+                    {isLoading && <Overlay />}
                     <div className="main-page__gallery">
                         {this.renderItems()}
                     </div>
