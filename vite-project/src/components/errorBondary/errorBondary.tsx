@@ -1,39 +1,40 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
+interface ErrorBoundaryProps {
+    children: React.ReactNode;
+}
 
 interface ErrorBoundaryState {
     hasError: boolean;
     error: Error | null;
-    errorInfo?: ErrorInfo | null;
 }
-interface Props {
-    children?: ReactNode;
-}
-interface Props {}
-class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
-    constructor(props: Props) {
-        super(props);
-        this.state = { hasError: false, error: null, errorInfo: null };
-    }
+
+export class ErrorBoundary extends Component<
+    ErrorBoundaryProps,
+    ErrorBoundaryState
+> {
+    state: ErrorBoundaryState = { hasError: false, error: null };
 
     static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-        return { hasError: true, error, errorInfo: null };
+        return { hasError: true, error };
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.error('Uncaught error:', error, errorInfo);
-        this.setState({ errorInfo });
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+        console.error('ErrorBoundary caught an error', error, errorInfo);
     }
 
-    render(): ReactNode {
+    closeModal = () => {
+        this.setState({ hasError: false, error: null });
+    };
+
+    render() {
         if (this.state.hasError) {
             return (
-                <div>
-                    <h2>Что-то пошло не так.</h2>
-                    <details style={{ whiteSpace: 'pre-wrap' }}>
-                        {this.state.error && this.state.error.toString()}
-                        <br />
-                        {this.state.errorInfo?.componentStack}
-                    </details>
+                <div className="error-modal">
+                    <div className="error-modal-content">
+                        <h1>Something go wrong!</h1>
+                        <p>{this.state.error?.toString()}</p>
+                        <button onClick={this.closeModal}>Close</button>
+                    </div>
                 </div>
             );
         }
@@ -41,5 +42,4 @@ class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
         return this.props.children;
     }
 }
-
 export default ErrorBoundary;

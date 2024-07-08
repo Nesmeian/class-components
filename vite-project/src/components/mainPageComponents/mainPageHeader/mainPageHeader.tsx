@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import logo from '..//..//../assets/image/xbox-gamepad.svg';
+import ErrorButton from '../../errorBondary/errorButton';
 
 type StateProps = {
     searchName: string;
@@ -25,7 +26,9 @@ export default class MainPageHeader extends Component<Props, StateProps> {
             searchName: e.target.value,
         });
     };
-
+    throwError = () => {
+        throw new Error('Искусственная ошибка');
+    };
     render(): React.ReactNode {
         return (
             <>
@@ -51,11 +54,12 @@ export default class MainPageHeader extends Component<Props, StateProps> {
                             />
                         </label>
                         <button
-                            className="search-container__button main-page__btn"
+                            className="search-container__button-search main-page__btn"
                             onClick={this.handleSearchClick}
                         >
                             Click me
                         </button>
+                        <ErrorButton></ErrorButton>
                     </div>
                 </header>
             </>

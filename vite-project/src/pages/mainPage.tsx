@@ -2,7 +2,6 @@ import { Component, ReactNode } from 'react';
 import MainPageHeader from '../components/mainPageComponents/mainPageHeader/mainPageHeader';
 import MainPageMain from '../components/mainPageComponents/mainPageMain/mainPageMain';
 import MainPageFooter from '../components/mainPageComponents/mainPageFooter/mainPageFooter';
-import ErrorBoundary from '../components/errorBondary/errorBondary';
 
 type State = {
     searchQuery: string;
@@ -21,7 +20,9 @@ export default class MainPage extends Component<voidProps, State> {
     handleSearch = (searchName: string) => {
         this.setState({ searchQuery: searchName });
     };
-
+    triggerError = () => {
+        throw new Error('Искусственно сгенерированная ошибка');
+    };
     shangeShowGames = (purpose: string): Promise<number | void> => {
         return new Promise<number | void>((resolve) => {
             if (purpose === 'add') {
@@ -43,7 +44,7 @@ export default class MainPage extends Component<voidProps, State> {
     render(): ReactNode {
         const { searchQuery } = this.state;
         return (
-            <ErrorBoundary>
+            <>
                 <MainPageHeader
                     onSearch={this.handleSearch}
                     showMore={this.shangeShowGames}
@@ -53,7 +54,7 @@ export default class MainPage extends Component<voidProps, State> {
                     showMore={this.shangeShowGames}
                 />
                 <MainPageFooter />
-            </ErrorBoundary>
+            </>
         );
     }
 }
