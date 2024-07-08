@@ -2,25 +2,27 @@ import { Component } from 'react';
 import logo from '..//..//../assets/image/react.svg';
 
 type StateProps = {
-    searchInput: string;
+    searchName: string;
 };
 interface Props {
+    showMore: (arg: string) => void;
     onSearch: (searchValue: string) => void;
 }
 export default class MainPageHeader extends Component<Props, StateProps> {
     constructor(props: Props) {
         super(props);
         const localSearch = localStorage.getItem('UserSearch') || '';
-        this.state = { searchInput: localSearch };
+        this.state = { searchName: localSearch };
     }
     handleSearchClick = () => {
-        this.props.onSearch(this.state.searchInput);
-        localStorage.setItem('UserSearch', this.state.searchInput);
+        this.props.onSearch(this.state.searchName);
+        this.props.showMore('reset');
+        localStorage.setItem('UserSearch', this.state.searchName);
     };
 
     changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            searchInput: e.target.value,
+            searchName: e.target.value,
         });
     };
 
@@ -38,12 +40,12 @@ export default class MainPageHeader extends Component<Props, StateProps> {
                                 className="search-container__input"
                                 type="text"
                                 placeholder="Search"
-                                value={this.state.searchInput}
+                                value={this.state.searchName}
                                 onChange={this.changeSearchValue}
                             />
                         </label>
                         <button
-                            className="search-container__button btn"
+                            className="search-container__button main-page__btn"
                             onClick={this.handleSearchClick}
                         >
                             Click me

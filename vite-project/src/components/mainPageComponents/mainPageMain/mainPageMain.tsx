@@ -9,42 +9,55 @@ type Game = {
 };
 type Props = {
     searchQuery: string;
+    showMore: (get: string) => Promise<void | number>;
 };
 type StateProps = {
     isLoading: boolean;
     gameData: Game[];
+    totalGames: number; // Новое свойство для общего количества игр
+    searchName: string;
 };
 export default class MainPageMain extends Component<Props, StateProps> {
     constructor(props: Props) {
         super(props);
+        const localSeacrh = localStorage.getItem('UserSearch') || 'Doom';
         this.state = {
             isLoading: false,
             gameData: [],
+            totalGames: 0, // Инициализируем с 0
+            searchName: localSeacrh,
         };
     }
     componentDidMount() {
-        const localSeach = localStorage.getItem('UserSearch') || 'Doom';
-        this.loadGameData(localSeach);
+        this.loadGameData(this.state.searchName);
     }
     componentDidUpdate(prevProps: Props) {
         if (this.props.searchQuery !== prevProps.searchQuery) {
             this.loadGameData(this.props.searchQuery);
         }
     }
+
     loadGameData = async (searchQuery: string) => {
         this.setState({ isLoading: true });
-        const pageSize = 20;
-        const url = `${base_url}?search=${searchQuery}&page_size=${pageSize}&key=${api_key}`;
+        // Используем актуальное значение searchQuery из props, а не из состояния
+        const actualSearchQuery = this.props.searchQuery || searchQuery;
+        const showGamesNumber = await this.props.showMore('get');
+        const pageSize =
+            showGamesNumber !== undefined ? 20 * showGamesNumber : 20;
+        const url = `${base_url}?search=${actualSearchQuery}&page_size=${pageSize}&key=${api_key}`;
         try {
             const response = await fetch(url);
-            <Overlay></Overlay>;
             if (!response.ok) {
                 throw new Error(
                     `Request failed with status ${response.status}`,
                 );
             }
             const data = await response.json();
-            this.setState({ gameData: data.results, isLoading: false });
+            this.setState({
+                gameData: data.results,
+                isLoading: false,
+                totalGames: data.count,
+            });
         } catch (error) {
             console.error(error);
             this.setState({ isLoading: false });
@@ -67,15 +80,36 @@ export default class MainPageMain extends Component<Props, StateProps> {
             );
         });
     };
-
+    handleShowMoreClick = async () => {
+        await this.props.showMore('add');
+        this.loadGameData(this.state.searchName);
+    };
     render(): ReactNode {
-        const { isLoading } = this.state;
+        const { isLoading, gameData, totalGames } = this.state;
+        const maxItemsToShow = 40; // Максимальное количество элементов для отображения
+
+        // Проверяем, не превышено ли максимальное количество элементов и есть ли еще игры для загрузки
+        const shouldShowMoreButton =
+            !isLoading &&
+            gameData.length < totalGames &&
+            gameData.length < maxItemsToShow;
+
         return (
             <>
                 <div className="main-page__main">
                     {isLoading && <Overlay />}
                     <div className="main-page__gallery">
-                        {this.renderItems()}
+                        <div className="main-page__gallery-container">
+                            {this.renderItems()}
+                        </div>
+                        {shouldShowMoreButton && (
+                            <button
+                                className="main-page__show-more main-page__btn"
+                                onClick={this.handleShowMoreClick}
+                            >
+                                Show more
+                            </button>
+                        )}
                     </div>
                 </div>
             </>

@@ -4,6 +4,9 @@
     margin: 0;
     user-select: none;
 }
+html {
+    position: sticky;
+}
 html,
 body,
 #root {
@@ -21,4 +24,8 @@ html {
 }
 body {
     font-size: 16rem;
+}
+.link {
+    color: white;
+    text-decoration: none;
 }
