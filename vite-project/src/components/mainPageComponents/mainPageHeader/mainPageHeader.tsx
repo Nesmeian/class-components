@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import logo from '..//..//../assets/image/react.svg';
+import logo from '..//..//../assets/image/xbox-gamepad.svg';
 
 type StateProps = {
     searchName: string;
@@ -31,7 +31,13 @@ export default class MainPageHeader extends Component<Props, StateProps> {
             <>
                 <header className="main-page__main-header">
                     <div className="main-header__logo-container">
-                        <img src={logo} alt="logo" className="logo__img" />
+                        <img
+                            src={logo}
+                            alt="logo"
+                            className="logo__img"
+                            width={100}
+                            height={100}
+                        />
                     </div>
                     <div className="header__search-container">
                         <label className="search-container__label">

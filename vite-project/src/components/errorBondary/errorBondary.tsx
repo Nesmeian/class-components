@@ -20,14 +20,12 @@ class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        // Можно также залогировать ошибку в сервисе отчетов об ошибках
         console.error('Uncaught error:', error, errorInfo);
         this.setState({ errorInfo });
     }
 
     render(): ReactNode {
         if (this.state.hasError) {
-            // Можно отрендерить любой запасной UI
             return (
                 <div>
                     <h2>Что-то пошло не так.</h2>
@@ -40,7 +38,6 @@ class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
             );
         }
 
-        // Если нет ошибок, рендерим детей
         return this.props.children;
     }
 }
